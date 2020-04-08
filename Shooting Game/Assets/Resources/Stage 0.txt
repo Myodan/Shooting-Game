@@ -1,0 +1,11 @@
+1, small, 1
+0.2, small, 1
+0.2, small, 1
+0.2, small, 1
+0.2, small, 1
+1, small, 3
+0.2, small, 3
+0.2, small, 3
+0.2, small, 3
+0.2, small, 3
+2, medium, 2
