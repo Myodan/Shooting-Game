@@ -15,6 +15,10 @@ public enum eEnemyBulletType {
     b
 }
 
+public enum eFollowerBulletType {
+    a
+}
+
 public class Bullet : MonoBehaviour {
 
     public eBulletType bulletType = eBulletType.player;

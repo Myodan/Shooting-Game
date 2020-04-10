@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
     public ObjectManager objectManager;
 
     public GameObject boomEffect;
+    public GameObject[] followers;
 
     private bool isTouchTop;
     private bool isTouchBottom;
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour {
     private bool isTouchLeft;
 
     private Animator anim;
-    
+
     private void Awake() {
         anim = GetComponent<Animator>();
     }
@@ -61,9 +62,6 @@ public class Player : MonoBehaviour {
     }
 
     private void Fire() {
-        if (!Input.GetButton("Fire1"))
-            return;
-
         if (curShotDelay < maxShotDelay)
             return;
 
@@ -82,6 +80,9 @@ public class Player : MonoBehaviour {
                 rigidL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 3:
+            case 4:
+            case 5:
+            case 6:
                 GameObject bulletRR = objectManager.MakeObj(ePlayerBulletType.a, transform.position + Vector3.forward + Vector3.right * 0.275f, transform.rotation);
                 GameObject bulletCC = objectManager.MakeObj(ePlayerBulletType.b, transform.position + Vector3.forward, transform.rotation);
                 GameObject bulletLL = objectManager.MakeObj(ePlayerBulletType.a, transform.position + Vector3.forward + Vector3.left * 0.275f, transform.rotation);
@@ -92,6 +93,7 @@ public class Player : MonoBehaviour {
                 rigidCC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 rigidLL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
+
         }
 
         curShotDelay = 0.0f;
@@ -207,6 +209,7 @@ public class Player : MonoBehaviour {
                     }
                     else {
                         power++;
+                        AddFollower();
                     }
 
                     break;
@@ -223,6 +226,18 @@ public class Player : MonoBehaviour {
             }
 
             collision.gameObject.SetActive(false);
+        }
+    }
+
+    private void AddFollower() {
+        if (power == 4) {
+            followers[0].SetActive(true);
+        }
+        else if (power == 5) {
+            followers[1].SetActive(true);
+        }
+        else if (power == 5) {
+            followers[2].SetActive(true);
         }
     }
 

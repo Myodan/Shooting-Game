@@ -14,6 +14,7 @@ public class ObjectManager : MonoBehaviour {
     public GameObject playerBulletBPrefab;
     public GameObject enemyBulletAPrefab;
     public GameObject enemyBulletBPrefab;
+    public GameObject followerBulletPrefab;
 
     private GameObject[] enemyL;
     private GameObject[] enemyM;
@@ -27,6 +28,7 @@ public class ObjectManager : MonoBehaviour {
     private GameObject[] playerBulletB;
     private GameObject[] enemyBulletA;
     private GameObject[] enemyBulletB;
+    private GameObject[] followerBullet;
 
     private void Awake() {
         enemyL = new GameObject[10];
@@ -41,6 +43,7 @@ public class ObjectManager : MonoBehaviour {
         playerBulletB = new GameObject[100];
         enemyBulletA = new GameObject[100];
         enemyBulletB = new GameObject[100];
+        followerBullet = new GameObject[100];
 
         Generate();
     }
@@ -97,6 +100,11 @@ public class ObjectManager : MonoBehaviour {
         for (int i = 0; i < enemyBulletB.Length; i++) {
             enemyBulletB[i] = Instantiate(enemyBulletBPrefab);
             enemyBulletB[i].SetActive(false);
+        }
+
+        for (int i = 0; i < followerBullet.Length; i++) {
+            followerBullet[i] = Instantiate(followerBulletPrefab);
+            followerBullet[i].SetActive(false);
         }
     }
 
@@ -202,6 +210,27 @@ public class ObjectManager : MonoBehaviour {
         return null;
     }
 
+    public GameObject MakeObj(eFollowerBulletType type, Vector3 pos, Quaternion rot) {
+        GameObject[] targetPool = null;
+
+        switch (type) {
+            case eFollowerBulletType.a:
+                targetPool = followerBullet;
+                break;
+        }
+
+        for (int i = 0; i < targetPool.Length; i++) {
+            if (targetPool[i].activeSelf == false) {
+                targetPool[i].SetActive(true);
+                targetPool[i].transform.position = pos;
+                targetPool[i].transform.rotation = rot;
+                return targetPool[i];
+            }
+        }
+
+        return null;
+    }
+
     public GameObject[] GetPool(eEnemyType type) {
         GameObject[] targetPool = null;
 
@@ -262,6 +291,18 @@ public class ObjectManager : MonoBehaviour {
                 break;
             case eEnemyBulletType.b:
                 targetPool = enemyBulletB;
+                break;
+        }
+
+        return targetPool;
+    }
+
+    public GameObject[] GetPool(eFollowerBulletType type) {
+        GameObject[] targetPool = null;
+
+        switch (type) {
+            case eFollowerBulletType.a:
+                targetPool = followerBullet;
                 break;
         }
 
