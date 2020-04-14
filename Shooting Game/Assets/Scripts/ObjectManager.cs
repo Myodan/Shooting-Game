@@ -1,24 +1,30 @@
 ﻿using UnityEngine;
 
 public class ObjectManager : MonoBehaviour {
-    [Space]
+    [Header("- Enemy")]
     public GameObject enemyLPrefab;
     public GameObject enemyMPrefab;
     public GameObject enemySPrefab;
-    [Space]
+    public GameObject enemyBPrefab;
+
+    [Header("- Item")]
     public GameObject itemCoinPrefab;
     public GameObject itemPowerPrefab;
     public GameObject itemBoomPrefab;
-    [Space]
+
+    [Header("- Bullet")]
     public GameObject playerBulletAPrefab;
     public GameObject playerBulletBPrefab;
+    public GameObject followerBulletPrefab;
     public GameObject enemyBulletAPrefab;
     public GameObject enemyBulletBPrefab;
-    public GameObject followerBulletPrefab;
+    public GameObject enemyBulletCPrefab;
+    public GameObject enemyBulletDPrefab;
 
     private GameObject[] enemyL;
     private GameObject[] enemyM;
     private GameObject[] enemyS;
+    private GameObject[] enemyB;
 
     private GameObject[] itemCoin;
     private GameObject[] itemPower;
@@ -26,14 +32,19 @@ public class ObjectManager : MonoBehaviour {
 
     private GameObject[] playerBulletA;
     private GameObject[] playerBulletB;
+    private GameObject[] followerBullet;
     private GameObject[] enemyBulletA;
     private GameObject[] enemyBulletB;
-    private GameObject[] followerBullet;
+    private GameObject[] enemyBulletC;
+    private GameObject[] enemyBulletD;
+
+    private GameObject[] targetPool;
 
     private void Awake() {
         enemyL = new GameObject[10];
         enemyM = new GameObject[10];
         enemyS = new GameObject[10];
+        enemyB = new GameObject[1];
 
         itemCoin = new GameObject[20];
         itemPower = new GameObject[10];
@@ -44,268 +55,156 @@ public class ObjectManager : MonoBehaviour {
         enemyBulletA = new GameObject[100];
         enemyBulletB = new GameObject[100];
         followerBullet = new GameObject[100];
+        enemyBulletC = new GameObject[1000];
+        enemyBulletD = new GameObject[50];
 
         Generate();
     }
 
+    private void GenerateExe(GameObject[] obj, GameObject prefab) {
+        for (int i = 0; i < obj.Length; i++) {
+            obj[i] = Instantiate(prefab);
+            obj[i].SetActive(false);
+        }
+    }
+
     private void Generate() {
         /* #1. Enemy */
-        for (int i = 0; i < enemyL.Length; i++) {
-            enemyL[i] = Instantiate(enemyLPrefab);
-            enemyL[i].SetActive(false);
-        }
-
-        for (int i = 0; i < enemyM.Length; i++) {
-            enemyM[i] = Instantiate(enemyMPrefab);
-            enemyM[i].SetActive(false);
-        }
-
-        for (int i = 0; i < enemyS.Length; i++) {
-            enemyS[i] = Instantiate(enemySPrefab);
-            enemyS[i].SetActive(false);
-        }
+        GenerateExe(enemyL, enemyLPrefab);
+        GenerateExe(enemyM, enemyMPrefab);
+        GenerateExe(enemyS, enemySPrefab);
+        GenerateExe(enemyB, enemyBPrefab);
 
         /* #2. Item */
-        for (int i = 0; i < itemCoin.Length; i++) {
-            itemCoin[i] = Instantiate(itemCoinPrefab);
-            itemCoin[i].SetActive(false);
-        }
-
-        for (int i = 0; i < itemPower.Length; i++) {
-            itemPower[i] = Instantiate(itemPowerPrefab);
-            itemPower[i].SetActive(false);
-        }
-
-        for (int i = 0; i < itemBoom.Length; i++) {
-            itemBoom[i] = Instantiate(itemBoomPrefab);
-            itemBoom[i].SetActive(false);
-        }
+        GenerateExe(itemCoin, itemCoinPrefab);
+        GenerateExe(itemPower, itemPowerPrefab);
+        GenerateExe(itemBoom, itemBoomPrefab);
 
         /* #3. Bullet */
-        for (int i = 0; i < playerBulletA.Length; i++) {
-            playerBulletA[i] = Instantiate(playerBulletAPrefab);
-            playerBulletA[i].SetActive(false);
+        GenerateExe(playerBulletA, playerBulletAPrefab);
+        GenerateExe(playerBulletB, playerBulletBPrefab);
+        GenerateExe(followerBullet, followerBulletPrefab);
+        GenerateExe(enemyBulletA, enemyBulletAPrefab);
+        GenerateExe(enemyBulletB, enemyBulletBPrefab);
+        GenerateExe(enemyBulletC, enemyBulletCPrefab);
+        GenerateExe(enemyBulletD, enemyBulletDPrefab);
+    }
+
+    private void SelectTarget(eEnemyType type) {
+        switch (type) {
+            case eEnemyType.large:
+                targetPool = enemyL;
+                break;
+            case eEnemyType.medium:
+                targetPool = enemyM;
+                break;
+            case eEnemyType.small:
+                targetPool = enemyS;
+                break;
+            case eEnemyType.boss:
+                targetPool = enemyB;
+                break;
+        }
+    }
+    private void SelectTarget(eItemType type) {
+        switch (type) {
+            case eItemType.coin:
+                targetPool = itemCoin;
+                break;
+            case eItemType.boom:
+                targetPool = itemBoom;
+                break;
+            case eItemType.power:
+                targetPool = itemPower;
+                break;
+        }
+    }
+    private void SelectTarget(ePlayerBulletType type) {
+        switch (type) {
+            case ePlayerBulletType.a:
+                targetPool = playerBulletA;
+                break;
+            case ePlayerBulletType.b:
+                targetPool = playerBulletB;
+                break;
+        }
+    }
+    private void SelectTarget(eEnemyBulletType type) {
+        switch (type) {
+            case eEnemyBulletType.a:
+                targetPool = enemyBulletA;
+                break;
+            case eEnemyBulletType.b:
+                targetPool = enemyBulletB;
+                break;
+            case eEnemyBulletType.c:
+                targetPool = enemyBulletC;
+                break;
+            case eEnemyBulletType.d:
+                targetPool = enemyBulletD;
+                break;
+        }
+    }
+    private void SelectTarget(eFollowerBulletType type) {
+        switch (type) {
+            case eFollowerBulletType.a:
+                targetPool = followerBullet;
+                break;
+        }
+    }
+
+    private GameObject MakeObjExe(Vector3 pos, Quaternion rot) {
+        for (int i = 0; i < targetPool.Length; i++) {
+            if (targetPool[i].activeSelf == false) {
+                targetPool[i].SetActive(true);
+                targetPool[i].transform.position = pos;
+                targetPool[i].transform.rotation = rot;
+                return targetPool[i];
+            }
         }
 
-        for (int i = 0; i < playerBulletB.Length; i++) {
-            playerBulletB[i] = Instantiate(playerBulletBPrefab);
-            playerBulletB[i].SetActive(false);
-        }
-
-        for (int i = 0; i < enemyBulletA.Length; i++) {
-            enemyBulletA[i] = Instantiate(enemyBulletAPrefab);
-            enemyBulletA[i].SetActive(false);
-        }
-
-        for (int i = 0; i < enemyBulletB.Length; i++) {
-            enemyBulletB[i] = Instantiate(enemyBulletBPrefab);
-            enemyBulletB[i].SetActive(false);
-        }
-
-        for (int i = 0; i < followerBullet.Length; i++) {
-            followerBullet[i] = Instantiate(followerBulletPrefab);
-            followerBullet[i].SetActive(false);
-        }
+        return null;
     }
 
     public GameObject MakeObj(eEnemyType type, Vector3 pos, Quaternion rot) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eEnemyType.large:
-                targetPool = enemyL;
-                break;
-            case eEnemyType.medium:
-                targetPool = enemyM;
-                break;
-            case eEnemyType.small:
-                targetPool = enemyS;
-                break;
-        }
-
-        for (int i = 0; i < targetPool.Length; i++) {
-            if (targetPool[i].activeSelf == false) {
-                targetPool[i].SetActive(true);
-                targetPool[i].transform.position = pos;
-                targetPool[i].transform.rotation = rot;
-                return targetPool[i];
-            }
-        }
-
-        return null;
+        SelectTarget(type);
+        return MakeObjExe(pos, rot);
     }
-
     public GameObject MakeObj(eItemType type, Vector3 pos, Quaternion rot) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eItemType.coin:
-                targetPool = itemCoin;
-                break;
-            case eItemType.boom:
-                targetPool = itemBoom;
-                break;
-            case eItemType.power:
-                targetPool = itemPower;
-                break;
-        }
-
-        for (int i = 0; i < targetPool.Length; i++) {
-            if (targetPool[i].activeSelf == false) {
-                targetPool[i].SetActive(true);
-                targetPool[i].transform.position = pos;
-                targetPool[i].transform.rotation = rot;
-                return targetPool[i];
-            }
-        }
-
-        return null;
+        SelectTarget(type);
+        return MakeObjExe(pos, rot);
     }
-
     public GameObject MakeObj(ePlayerBulletType type, Vector3 pos, Quaternion rot) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case ePlayerBulletType.a:
-                targetPool = playerBulletA;
-                break;
-            case ePlayerBulletType.b:
-                targetPool = playerBulletB;
-                break;
-        }
-
-        for (int i = 0; i < targetPool.Length; i++) {
-            if (targetPool[i].activeSelf == false) {
-                targetPool[i].SetActive(true);
-                targetPool[i].transform.position = pos;
-                targetPool[i].transform.rotation = rot;
-                return targetPool[i];
-            }
-        }
-
-        return null;
+        SelectTarget(type);
+        return MakeObjExe(pos, rot);
     }
-
     public GameObject MakeObj(eEnemyBulletType type, Vector3 pos, Quaternion rot) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eEnemyBulletType.a:
-                targetPool = enemyBulletA;
-                break;
-            case eEnemyBulletType.b:
-                targetPool = enemyBulletB;
-                break;
-        }
-
-        for (int i = 0; i < targetPool.Length; i++) {
-            if (targetPool[i].activeSelf == false) {
-                targetPool[i].SetActive(true);
-                targetPool[i].transform.position = pos;
-                targetPool[i].transform.rotation = rot;
-                return targetPool[i];
-            }
-        }
-
-        return null;
+        SelectTarget(type);
+        return MakeObjExe(pos, rot);
     }
-
     public GameObject MakeObj(eFollowerBulletType type, Vector3 pos, Quaternion rot) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eFollowerBulletType.a:
-                targetPool = followerBullet;
-                break;
-        }
-
-        for (int i = 0; i < targetPool.Length; i++) {
-            if (targetPool[i].activeSelf == false) {
-                targetPool[i].SetActive(true);
-                targetPool[i].transform.position = pos;
-                targetPool[i].transform.rotation = rot;
-                return targetPool[i];
-            }
-        }
-
-        return null;
+        SelectTarget(type);
+        return MakeObjExe(pos, rot);
     }
 
     public GameObject[] GetPool(eEnemyType type) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eEnemyType.large:
-                targetPool = enemyL;
-                break;
-            case eEnemyType.medium:
-                targetPool = enemyM;
-                break;
-            case eEnemyType.small:
-                targetPool = enemyS;
-                break;
-        }
-
+        SelectTarget(type);
         return targetPool;
     }
-
     public GameObject[] GetPool(eItemType type) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eItemType.coin:
-                targetPool = itemCoin;
-                break;
-            case eItemType.boom:
-                targetPool = itemBoom;
-                break;
-            case eItemType.power:
-                targetPool = itemPower;
-                break;
-        }
-
+        SelectTarget(type);
         return targetPool;
     }
-
     public GameObject[] GetPool(ePlayerBulletType type) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case ePlayerBulletType.a:
-                targetPool = playerBulletA;
-                break;
-            case ePlayerBulletType.b:
-                targetPool = playerBulletB;
-                break;
-        }
-
+        SelectTarget(type);
         return targetPool;
     }
-
     public GameObject[] GetPool(eEnemyBulletType type) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eEnemyBulletType.a:
-                targetPool = enemyBulletA;
-                break;
-            case eEnemyBulletType.b:
-                targetPool = enemyBulletB;
-                break;
-        }
-
+        SelectTarget(type);
         return targetPool;
     }
-
     public GameObject[] GetPool(eFollowerBulletType type) {
-        GameObject[] targetPool = null;
-
-        switch (type) {
-            case eFollowerBulletType.a:
-                targetPool = followerBullet;
-                break;
-        }
-
+        SelectTarget(type);
         return targetPool;
     }
 }

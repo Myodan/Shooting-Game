@@ -23,15 +23,24 @@ public class Player : MonoBehaviour {
     public GameObject boomEffect;
     public GameObject[] followers;
 
+    public bool isRespawnTime;
+
     private bool isTouchTop;
     private bool isTouchBottom;
     private bool isTouchRight;
     private bool isTouchLeft;
 
     private Animator anim;
+    private SpriteRenderer[] spriteRenderer;
 
     private void Awake() {
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponentsInChildren<SpriteRenderer>();
+    }
+
+    private void OnEnable() {
+        Unbeatable();
+        Invoke("Unbeatable", 3f);
     }
 
     private void Update() {
@@ -39,6 +48,21 @@ public class Player : MonoBehaviour {
         Fire();
         Boom();
         Reload();
+    }
+
+    private void Unbeatable() {
+        isRespawnTime = !isRespawnTime;
+
+        if (isRespawnTime) {
+            for (int i = 0; i < spriteRenderer.Length; i++) {
+                spriteRenderer[i].color = new Color(1f, 1f, 1f, 0.5f);
+            }
+        }
+        else {
+            for (int i = 0; i < spriteRenderer.Length; i++) {
+                spriteRenderer[i].color = new Color(1f, 1f, 1f, 1f);
+            }
+        }
     }
 
     private void Move() {
@@ -180,6 +204,10 @@ public class Player : MonoBehaviour {
             }
         }
         else if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet") {
+            if (isRespawnTime) {
+                return;
+            }
+
             if (isHit)
                 return;
 
@@ -236,7 +264,7 @@ public class Player : MonoBehaviour {
         else if (power == 5) {
             followers[1].SetActive(true);
         }
-        else if (power == 5) {
+        else if (power == 6) {
             followers[2].SetActive(true);
         }
     }

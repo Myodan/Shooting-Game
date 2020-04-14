@@ -136,3 +136,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletType: 1
   dmg: 3
+  isRotate: 1

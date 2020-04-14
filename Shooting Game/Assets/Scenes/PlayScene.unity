@@ -295,6 +295,8 @@ MonoBehaviour:
     type: 3}
   enemySPrefab: {fileID: 7058114822238203200, guid: 9bff975856abb5f47a13e94e7a1d5c92,
     type: 3}
+  enemyBPrefab: {fileID: 1474092672879146790, guid: 8ee9c0fefd75ade42873f827bb7b7b07,
+    type: 3}
   itemCoinPrefab: {fileID: 5444797442773327667, guid: aad5ddeb3d8da4b4aae8736b7408a3cd,
     type: 3}
   itemPowerPrefab: {fileID: 4539704465621868240, guid: 26615de79630cd9418459efa2cf8f949,
@@ -305,11 +307,15 @@ MonoBehaviour:
     type: 3}
   playerBulletBPrefab: {fileID: 2763066456759100381, guid: 664db05eecaa1ee49a7088a07eaf5f4a,
     type: 3}
+  followerBulletPrefab: {fileID: 2763066456759100381, guid: 4936a703e4c841046859bb5493ed88eb,
+    type: 3}
   enemyBulletAPrefab: {fileID: 2763066456759100381, guid: d14a87649f91bf847bb6475cfd265bf3,
     type: 3}
   enemyBulletBPrefab: {fileID: 2763066456759100381, guid: a7d3013ca057f304fa79ebc2ad15e32b,
     type: 3}
-  followerBulletPrefab: {fileID: 2763066456759100381, guid: 4936a703e4c841046859bb5493ed88eb,
+  enemyBulletCPrefab: {fileID: 2763066456759100381, guid: 1f225fec6d3a8434c8c334c751097015,
+    type: 3}
+  enemyBulletDPrefab: {fileID: 2763066456759100381, guid: 1a786393a6f057a42b93526ab6967cd7,
     type: 3}
 --- !u!4 &112192138
 Transform:
@@ -695,7 +701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   life: 3
   score: 0
-  power: 1
+  power: 3
   maxPower: 6
   boom: 1
   maxBoom: 3
@@ -711,6 +717,7 @@ MonoBehaviour:
   - {fileID: 2020796173}
   - {fileID: 1153119676}
   - {fileID: 1675302523}
+  isRespawnTime: 0
 --- !u!212 &423689835
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -772,7 +779,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -4, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2020796176}
+  - {fileID: 1153119677}
+  - {fileID: 1675302526}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1327,7 +1337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 24
+  m_ReferencePixelsPerUnit: 128
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
@@ -1436,7 +1446,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: a47149bac15f1924299975c1c74ece3b, type: 3}
     m_FontSize: 70
     m_FontStyle: 1
     m_BestFit: 0
@@ -2222,12 +2232,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1153119676}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_Father: {fileID: 423689836}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1153119678
 MonoBehaviour:
@@ -2245,7 +2255,7 @@ MonoBehaviour:
   maxShotDelay: 2
   objectManager: {fileID: 112192137}
   followPos: {x: 0, y: 0, z: 0}
-  followDelay: 24
+  followDelay: 32
   parent: {fileID: 2020796176}
 --- !u!212 &1153119679
 SpriteRenderer:
@@ -3025,7 +3035,7 @@ MonoBehaviour:
   maxShotDelay: 2
   objectManager: {fileID: 112192137}
   followPos: {x: 0, y: 0, z: 0}
-  followDelay: 24
+  followDelay: 32
   parent: {fileID: 1153119677}
 --- !u!212 &1675302525
 SpriteRenderer:
@@ -3084,12 +3094,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675302523}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_Father: {fileID: 423689836}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1687761958
 GameObject:
@@ -3685,7 +3695,7 @@ MonoBehaviour:
   maxShotDelay: 2
   objectManager: {fileID: 112192137}
   followPos: {x: 0, y: 0, z: 0}
-  followDelay: 24
+  followDelay: 32
   parent: {fileID: 423689836}
 --- !u!212 &2020796175
 SpriteRenderer:
@@ -3744,12 +3754,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020796173}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_Father: {fileID: 423689836}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2038649684
 GameObject:

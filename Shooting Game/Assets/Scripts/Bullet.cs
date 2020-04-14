@@ -12,7 +12,9 @@ public enum ePlayerBulletType {
 
 public enum eEnemyBulletType {
     a,
-    b
+    b,
+    c,
+    d
 }
 
 public enum eFollowerBulletType {
@@ -24,6 +26,13 @@ public class Bullet : MonoBehaviour {
     public eBulletType bulletType = eBulletType.player;
 
     public float dmg = 1f;
+    public bool isRotate;
+
+    private void Update() {
+        if (isRotate) {
+            transform.Rotate(Vector3.forward * 10);
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.tag == "BorderDestroy") {
