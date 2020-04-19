@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour {
         Rigidbody2D rigid = enemy.GetComponent<Rigidbody2D>();
         Enemy enemyLogic = enemy.GetComponent<Enemy>();
         enemyLogic.player = player;
+        enemyLogic.gameManager = this;
         enemyLogic.objectManager = objectManager;
 
         switch (spawnPoints[spawnList[spawnIndex].point].parent.name) {
@@ -134,6 +135,20 @@ public class GameManager : MonoBehaviour {
         player.transform.position = Vector3.down * 3.5f;
         player.SetActive(true);
         playerLogic.isHit = false;
+    }
+
+    public void CallExplosion(Vector3 pos, string tpye) {
+        GameObject explosion = objectManager.MakeObj("Explosion", pos, Quaternion.identity);
+        Explosion explosionLogin = explosion.GetComponent<Explosion>();
+
+        explosionLogin.StartExplosion(tpye);
+    }
+
+    public void CallExplosion(Vector3 pos, eEnemyType tpye) {
+        GameObject explosion = objectManager.MakeObj("Explosion", pos, Quaternion.identity);
+        Explosion explosionLogin = explosion.GetComponent<Explosion>();
+
+        explosionLogin.StartExplosion(tpye);
     }
 
     public void GameOver() {

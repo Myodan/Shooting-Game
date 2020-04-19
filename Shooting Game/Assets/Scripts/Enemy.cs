@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour {
     private Animator anim;
 
     [HideInInspector] public GameObject player;
+    [HideInInspector] public GameManager gameManager;
     [HideInInspector] public ObjectManager objectManager;
 
     private void Awake() {
@@ -40,9 +41,11 @@ public class Enemy : MonoBehaviour {
 
     private void OnEnable() {
         health = startHealth;
-
         if (enemyType == eEnemyType.boss) {
             Invoke("Stop", 2f);
+        }
+        else {
+            ReturnSprite();
         }
     }
 
@@ -251,6 +254,7 @@ public class Enemy : MonoBehaviour {
 
             CancelInvoke();
             gameObject.SetActive(false);
+            gameManager.CallExplosion(transform.position, enemyType);
         }
     }
 

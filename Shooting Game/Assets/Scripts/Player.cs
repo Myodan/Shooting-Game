@@ -23,6 +23,8 @@ public class Player : MonoBehaviour {
     public GameObject boomEffect;
     public GameObject[] followers;
 
+    public Joystick joystick;
+
     public bool isRespawnTime;
 
     private bool isTouchTop;
@@ -31,11 +33,11 @@ public class Player : MonoBehaviour {
     private bool isTouchLeft;
 
     private Animator anim;
-    private SpriteRenderer[] spriteRenderer;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake() {
         anim = GetComponent<Animator>();
-        spriteRenderer = GetComponentsInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable() {
@@ -54,35 +56,35 @@ public class Player : MonoBehaviour {
         isRespawnTime = !isRespawnTime;
 
         if (isRespawnTime) {
-            for (int i = 0; i < spriteRenderer.Length; i++) {
-                spriteRenderer[i].color = new Color(1f, 1f, 1f, 0.5f);
+            spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+            for (int i = 0; i < followers.Length; i++) {
+                followers[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
             }
         }
         else {
-            for (int i = 0; i < spriteRenderer.Length; i++) {
-                spriteRenderer[i].color = new Color(1f, 1f, 1f, 1f);
+            spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+            for (int i = 0; i < followers.Length; i++) {
+                followers[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
             }
         }
     }
 
     private void Move() {
-        float h = Input.GetAxisRaw("Horizontal");
+        float h = joystick.valueRaw.x;
         if ((isTouchRight && h == 1) || (isTouchLeft && h == -1)) {
             h = 0;
         }
-        float v = Input.GetAxisRaw("Vertical");
+        float v = joystick.valueRaw.y;
         if ((isTouchTop && v == 1) || (isTouchBottom && v == -1)) {
             v = 0;
         }
 
         Vector3 curPos = transform.position;
-        Vector3 nextPos = new Vector3(h, v, 0) * speed * Time.deltaTime;
+        Vector3 nextPos = new Vector3(h, v, 0) * speed * joystick.GetDistance() * Time.deltaTime;
 
         transform.position = curPos + nextPos;
 
-        if (Input.GetButtonDown("Horizontal") || Input.GetButtonUp("Horizontal")) {
-            anim.SetInteger("Input", (int)h);
-        }
+        anim.SetInteger("Input", (int)h);
     }
 
     private void Fire() {
@@ -214,6 +216,7 @@ public class Player : MonoBehaviour {
             isHit = true;
             life--;
             gameManager.UpdateLifeIcon();
+            gameManager.CallExplosion(transform.position, "Player");
 
             if (life <= 0) {
                 gameManager.GameOver();

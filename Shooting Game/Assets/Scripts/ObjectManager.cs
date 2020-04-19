@@ -21,6 +21,9 @@ public class ObjectManager : MonoBehaviour {
     public GameObject enemyBulletCPrefab;
     public GameObject enemyBulletDPrefab;
 
+    [Header("- Other")]
+    public GameObject explosionPrefab;
+
     private GameObject[] enemyL;
     private GameObject[] enemyM;
     private GameObject[] enemyS;
@@ -37,6 +40,8 @@ public class ObjectManager : MonoBehaviour {
     private GameObject[] enemyBulletB;
     private GameObject[] enemyBulletC;
     private GameObject[] enemyBulletD;
+
+    private GameObject[] explosion;
 
     private GameObject[] targetPool;
 
@@ -57,6 +62,8 @@ public class ObjectManager : MonoBehaviour {
         followerBullet = new GameObject[100];
         enemyBulletC = new GameObject[1000];
         enemyBulletD = new GameObject[50];
+
+        explosion = new GameObject[20];
 
         Generate();
     }
@@ -88,6 +95,9 @@ public class ObjectManager : MonoBehaviour {
         GenerateExe(enemyBulletB, enemyBulletBPrefab);
         GenerateExe(enemyBulletC, enemyBulletCPrefab);
         GenerateExe(enemyBulletD, enemyBulletDPrefab);
+
+        /* Other */
+        GenerateExe(explosion, explosionPrefab);
     }
 
     private void SelectTarget(eEnemyType type) {
@@ -152,6 +162,13 @@ public class ObjectManager : MonoBehaviour {
                 break;
         }
     }
+    private void SelectTarget(string type) {
+        switch (type) {
+            case "Explosion":
+                targetPool = explosion;
+                break;
+        }
+    }
 
     private GameObject MakeObjExe(Vector3 pos, Quaternion rot) {
         for (int i = 0; i < targetPool.Length; i++) {
@@ -186,6 +203,10 @@ public class ObjectManager : MonoBehaviour {
         SelectTarget(type);
         return MakeObjExe(pos, rot);
     }
+    public GameObject MakeObj(string type, Vector3 pos, Quaternion rot) {
+        SelectTarget(type);
+        return MakeObjExe(pos, rot);
+    }
 
     public GameObject[] GetPool(eEnemyType type) {
         SelectTarget(type);
@@ -204,6 +225,10 @@ public class ObjectManager : MonoBehaviour {
         return targetPool;
     }
     public GameObject[] GetPool(eFollowerBulletType type) {
+        SelectTarget(type);
+        return targetPool;
+    }
+    public GameObject[] GetPool(string type) {
         SelectTarget(type);
         return targetPool;
     }
